@@ -1,6 +1,6 @@
 import React from 'react'
 const Message = ({ message }) => {
-  if(message === null){
+  if(!message.content){
     return(
       <></>
     )
@@ -12,7 +12,7 @@ const Message = ({ message }) => {
           fontSize: '2em',
         }}
       >
-        {message.message}
+        {message.content}
       </div>
     )
   }

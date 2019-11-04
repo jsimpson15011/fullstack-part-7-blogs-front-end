@@ -6,11 +6,11 @@ import blogsService from './services/blogs'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
-import { useField,useResource } from "./hooks"
+import { useField, useResource } from './hooks'
+import { newMessage } from './reducers/messageReducer'
+import { connect } from 'react-redux'
 
-const App = () => {
-  //const [blogs, setBlogs] = useState([])
-  const [message, setMessage] = useState(null)
+const App = (props) => {
   const [user, setUser] = useState(null)
   const blogTitle = useField('text')
   const blogAuthor = useField('text')
@@ -32,14 +32,11 @@ const App = () => {
     blogServiceHook.getAll()
   }, [])
 
-  const createMessage = (message, type) => {
-    setMessage({
-      message: message,
+  const createMessage = (content, type) => {
+    props.newMessage({
+      content: content,
       type: type
     })
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
   }
 
   const blogFormRef = React.createRef()
@@ -50,7 +47,7 @@ const App = () => {
       const usernameValue = username.value
       const passwordValue = password.value
 
-      const credentials = { 'username': usernameValue, 'password' : passwordValue }
+      const credentials = { 'username': usernameValue, 'password': passwordValue }
 
       const user = await loginService.login(credentials)
 
@@ -71,7 +68,7 @@ const App = () => {
     setUser(null)
   }
 
-  const handleBlogCreation = async(event) => {
+  const handleBlogCreation = async (event) => {
     event.preventDefault()
     blogFormRef.current.toggleVisibility()
     const newBlog = {
@@ -81,16 +78,15 @@ const App = () => {
       user: user.id
     }
 
-    try{
+    try {
       await blogServiceHook.create(newBlog)
       blogServiceHook.getAll()
 
       createMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
     } catch (e) {
-      if (e.response.data.error){
+      if (e.response.data.error) {
         createMessage(e.response.data.error, 'error')
       } else {
-        console.log(e)
         createMessage('something went wrong please try again', 'error')
       }
     }
@@ -130,13 +126,14 @@ const App = () => {
         <p>{`${user.name} logged in`}
           <button onClick={handleLogout}>Log out</button>
         </p>
-        {blogsSortedByLikes.map(blog => <Blog
-          key = {blog.id}
-          blog = {blog}
-          user = {user}
-          handleLike = {handleLike}
-          handleDelete = {handleDelete}
-        />
+        {blogsSortedByLikes.map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            user={user}
+            handleLike={handleLike}
+            handleDelete={handleDelete}
+          />
         )}
       </div>
     )
@@ -145,13 +142,13 @@ const App = () => {
   if (user === null) {
     return (
       <div className="App">
-        <Message message = {message}/>
+        <Message message={''}/>
         <h2>Log into application</h2>
-        <Togglable buttonLabel = 'login'>
+        <Togglable buttonLabel='login'>
           <LoginForm
-            handleLogin = {handleLogin}
-            username = {username}
-            password = {password}
+            handleLogin={handleLogin}
+            username={username}
+            password={password}
           />
         </Togglable>
       </div>
@@ -160,14 +157,14 @@ const App = () => {
 
   return (
     <div className="App">
-      <Message message = {message}/>
+      <Message message={props.message}/>
       <h2>blogs</h2>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <NewBlogForm
-          handleBlogCreation = {handleBlogCreation}
-          blogTitle = {blogTitle}
-          blogAuthor = {blogAuthor}
-          blogUrl = {blogUrl}
+          handleBlogCreation={handleBlogCreation}
+          blogTitle={blogTitle}
+          blogAuthor={blogAuthor}
+          blogUrl={blogUrl}
         />
       </Togglable>
       {blogsList()}
@@ -175,4 +172,14 @@ const App = () => {
   )
 }
 
-export default App
+const mapStateToProps = state => (
+  {
+    message: state.message
+  }
+)
+
+const mapDispatchToProps = {
+  newMessage
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
