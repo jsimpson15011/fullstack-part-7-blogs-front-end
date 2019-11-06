@@ -2,20 +2,20 @@ import Blog from './Blog'
 import React from 'react'
 import { connect } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
+import { logOut } from '../reducers/userReducer'
 
 const BlogsList = (props) => {
-  //todo add log out button
   return (
     <div className="blog-list">
       <h2>Blogs</h2>
-      {/*      <p>{`${user.name} logged in`}
-        <button onClick={handleLogout}>Log out</button>
-      </p>*/}
+      <p>{`${props.user.name} logged in`}
+        <button onClick={() => props.logOut()}>Log out</button>
+      </p>
       {props.blogs.map(blog =>
         <Blog
           key={blog.id}
           blog={blog}
-          user={blog.user}
+          user={props.user}
           handleLike={() => props.likeBlog(blog)}
           handleDelete={() => props.deleteBlog(blog)}
         />
@@ -35,6 +35,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = {
   deleteBlog,
-  likeBlog
+  likeBlog,
+  logOut
 }
-export default connect(mapStateToProps,mapDispatchToProps)(BlogsList)
+export default connect(mapStateToProps, mapDispatchToProps)(BlogsList)

@@ -2,22 +2,27 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-import{ Provider } from 'react-redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import { Provider } from 'react-redux'
 import ReduxThunk from 'redux-thunk'
 import messageReducer from './reducers/messageReducer'
 import blogReducer from './reducers/blogReducer'
+import userReducer from './reducers/userReducer'
 
 const rootReducer = combineReducers({
   message: messageReducer,
-  blogs: blogReducer
+  blogs: blogReducer,
+  user: userReducer
 })
 const store = createStore(
   rootReducer,
-  applyMiddleware(ReduxThunk)
+  composeWithDevTools(
+    applyMiddleware(ReduxThunk)
+  )
 )
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <App/>
   </Provider>,
   document.getElementById('root'))

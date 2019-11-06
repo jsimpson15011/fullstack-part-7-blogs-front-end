@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import React, { useEffect } from 'react'
 import Message from './components/Message'
 import BlogsList from './components/BlogList'
-import loginService from './services/login'
-import blogsService from './services/blogs'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import { useField } from './hooks'
 import { newMessage } from './reducers/messageReducer'
 import { getAllBlogs, createNewBlog } from './reducers/blogReducer'
+import { initialUserCheck, logIn } from './reducers/userReducer'
 import { connect } from 'react-redux'
 
 const App = (props) => {
-  const [user, setUser] = useState(null)
   const blogTitle = useField('text')
   const blogAuthor = useField('text')
   const blogUrl = useField('text')
@@ -21,50 +18,22 @@ const App = (props) => {
   const password = useField('password')
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogsService.setToken(user.token)
-    }
+    props.initialUserCheck()
   }, [])
   useEffect(() => {
     props.getAllBlogs()
   }, [])
-  const createMessage = (content, type) => {
-    props.newMessage({
-      content: content,
-      type: type
-    })
-  }
 
   const blogFormRef = React.createRef()
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      const usernameValue = username.value
-      const passwordValue = password.value
+    const usernameValue = username.value
+    const passwordValue = password.value
 
-      const credentials = { 'username': usernameValue, 'password': passwordValue }
-
-      const user = await loginService.login(credentials)
-
-      window.localStorage.setItem(
-        'loggedBlogUser', JSON.stringify(user)
-      )
-      setUser(user)
-      blogsService.setToken(user.token)
-    } catch (e) {
-      createMessage(e.response.data.error, 'error')
-    }
+    props.logIn(usernameValue, passwordValue)
     username.reset()
     password.reset()
-  }
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogUser')
-    blogsService.setToken(null)
-    setUser(null)
   }
 
   const handleBlogCreation = async (event) => {
@@ -74,7 +43,7 @@ const App = (props) => {
       title: blogTitle.value,
       author: blogAuthor.value,
       url: blogUrl.value,
-      user: user.id
+      user: props.user.id
     }
 
     props.createNewBlog(newBlog)
@@ -85,10 +54,10 @@ const App = (props) => {
     blogUrl.reset()
   }
 
-  if (user === null) {
+  if (props.user === null) {
     return (
       <div className="App">
-        <Message message={''}/>
+        <Message message={props.message}/>
         <h2>Log into application</h2>
         <Togglable buttonLabel='login'>
           <LoginForm
@@ -111,10 +80,11 @@ const App = (props) => {
           blogTitle={blogTitle}
           blogAuthor={blogAuthor}
           blogUrl={blogUrl}
-          handleLogout={handleLogout}
         />
       </Togglable>
-      <BlogsList/>
+      <BlogsList
+        user={props.user}
+      />
     </div>
   )
 }
@@ -122,14 +92,17 @@ const App = (props) => {
 const mapStateToProps = state => (
   {
     message: state.message,
-    blogs: state.blogs
+    blogs: state.blogs,
+    user: state.user
   }
 )
 
 const mapDispatchToProps = {
   newMessage,
   getAllBlogs,
-  createNewBlog
+  createNewBlog,
+  initialUserCheck,
+  logIn
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
