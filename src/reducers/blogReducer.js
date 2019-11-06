@@ -13,7 +13,7 @@ export const getAllBlogs = () => {
   }
 }
 
-export const createNewBlog = (blog) => {
+export const createNewBlog = blog => {
   return async dispatch => {
     try{
       await blogService.create(blog)
@@ -22,7 +22,53 @@ export const createNewBlog = (blog) => {
       const blogs = await blogService.getAll()
       dispatch(
         {
-          type: 'CREATE_BLOG',
+          type: 'GET_ALL_BLOGS',
+          data: blogs
+        }
+      )
+    } catch (e) {
+      if (e.response.data.error) {
+        dispatch(newMessage({content:e.response.data.error, type:'error'}))
+      } else {
+        dispatch(newMessage({content:'something went wrong please try again', type:'error'}))
+      }
+    }
+  }
+}
+
+export const deleteBlog = blog => {
+  return async dispatch => {
+    try{
+      await blogService.deleteBlog(blog)
+      dispatch(newMessage({content: `blog ${blog.title} by ${blog.author} removed`}))
+
+      const blogs = await blogService.getAll()
+      dispatch(
+        {
+          type: 'GET_ALL_BLOGS',
+          data: blogs
+        }
+      )
+    } catch (e) {
+      if (e.response.data.error) {
+        dispatch(newMessage({content:e.response.data.error, type:'error'}))
+      } else {
+        dispatch(newMessage({content:'something went wrong please try again', type:'error'}))
+      }
+    }
+  }
+}
+
+export const likeBlog = blog => {
+  return async dispatch => {
+    try{
+      await blogService.addLike(blog)
+      dispatch(newMessage({content: `you voted for ${blog.title} by ${blog.author}`}))
+
+      const blogs = await blogService.getAll()
+      dispatch(
+        {
+          type: 'GET_ALL_BLOGS',
           data: blogs
         }
       )
@@ -39,8 +85,6 @@ export const createNewBlog = (blog) => {
 const blogReducer = (state=[], action) => {
   switch (action.type) {
   case 'GET_ALL_BLOGS':
-    return action.data
-  case 'CREATE_BLOG':
     return action.data
   default:
     return state

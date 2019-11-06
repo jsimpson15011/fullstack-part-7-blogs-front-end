@@ -7,7 +7,7 @@ import blogsService from './services/blogs'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
-import { useField, useResource } from './hooks'
+import { useField } from './hooks'
 import { newMessage } from './reducers/messageReducer'
 import { getAllBlogs, createNewBlog } from './reducers/blogReducer'
 import { connect } from 'react-redux'
@@ -111,6 +111,7 @@ const App = (props) => {
           blogTitle={blogTitle}
           blogAuthor={blogAuthor}
           blogUrl={blogUrl}
+          handleLogout={handleLogout}
         />
       </Togglable>
       <BlogsList/>

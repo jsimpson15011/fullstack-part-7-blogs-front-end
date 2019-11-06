@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 const Blog = ({ blog, user, handleLike, handleDelete }) => {
   const [visible, setVisibility] = useState(false)
   const showWhenVisible = { display: visible ? '' : 'none' }
-
   return (
     <div style={{
       border: 'solid 1px',
