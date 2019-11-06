@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Message from './components/Message'
+import BlogsList from './components/BlogList'
 import loginService from './services/login'
 import blogsService from './services/blogs'
 import Togglable from './components/Togglable'
@@ -8,6 +9,7 @@ import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import { useField, useResource } from './hooks'
 import { newMessage } from './reducers/messageReducer'
+import { getAllBlogs, createNewBlog } from './reducers/blogReducer'
 import { connect } from 'react-redux'
 
 const App = (props) => {
@@ -17,21 +19,18 @@ const App = (props) => {
   const blogUrl = useField('text')
   const username = useField('text')
   const password = useField('password')
-  const [blogs, blogServiceHook] = useResource('http://localhost:3003/api/blogs')
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      blogServiceHook.setToken(user.token)
       blogsService.setToken(user.token)
     }
   }, [])
   useEffect(() => {
-    blogServiceHook.getAll()
+    props.getAllBlogs()
   }, [])
-
   const createMessage = (content, type) => {
     props.newMessage({
       content: content,
@@ -55,7 +54,7 @@ const App = (props) => {
         'loggedBlogUser', JSON.stringify(user)
       )
       setUser(user)
-      blogServiceHook.setToken(user.token)
+      blogsService.setToken(user.token)
     } catch (e) {
       createMessage(e.response.data.error, 'error')
     }
@@ -64,7 +63,7 @@ const App = (props) => {
   }
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogUser')
-    blogServiceHook.setToken(null)
+    blogsService.setToken(null)
     setUser(null)
   }
 
@@ -78,65 +77,12 @@ const App = (props) => {
       user: user.id
     }
 
-    try {
-      await blogServiceHook.create(newBlog)
-      blogServiceHook.getAll()
+    props.createNewBlog(newBlog)
 
-      createMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
-    } catch (e) {
-      if (e.response.data.error) {
-        createMessage(e.response.data.error, 'error')
-      } else {
-        createMessage('something went wrong please try again', 'error')
-      }
-    }
 
     blogTitle.reset()
     blogAuthor.reset()
     blogUrl.reset()
-  }
-
-  const handleLike = async (blog) => {
-    try {
-      await blogsService.addLike(blog)
-      blogServiceHook.getAll()
-    } catch (e) {
-      createMessage(e.response.data.error, 'error')
-    }
-  }
-
-  const handleDelete = async (blog) => {
-    try {
-      if (window.confirm(`are you sure you want to delete the blog ${blog.title}`)) {
-        await blogsService.deleteBlog(blog)
-        blogServiceHook.getAll()
-      }
-    } catch (e) {
-      createMessage(e.response.data.error, 'error')
-    }
-  }
-
-  const blogsList = () => {
-    const blogsSortedByLikes = blogs.sort((a, b) => {
-      return b.likes - a.likes
-    })
-    return (
-      <div className="blog-list">
-        <h2>Blogs</h2>
-        <p>{`${user.name} logged in`}
-          <button onClick={handleLogout}>Log out</button>
-        </p>
-        {blogsSortedByLikes.map(blog =>
-          <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-            handleLike={handleLike}
-            handleDelete={handleDelete}
-          />
-        )}
-      </div>
-    )
   }
 
   if (user === null) {
@@ -167,19 +113,22 @@ const App = (props) => {
           blogUrl={blogUrl}
         />
       </Togglable>
-      {blogsList()}
+      <BlogsList/>
     </div>
   )
 }
 
 const mapStateToProps = state => (
   {
-    message: state.message
+    message: state.message,
+    blogs: state.blogs
   }
 )
 
 const mapDispatchToProps = {
-  newMessage
+  newMessage,
+  getAllBlogs,
+  createNewBlog
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
