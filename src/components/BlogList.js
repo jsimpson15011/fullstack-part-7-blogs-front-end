@@ -1,4 +1,4 @@
-import Blog from './Blog'
+import BlogLink from './BlogLink'
 import React from 'react'
 import { connect } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
@@ -12,7 +12,7 @@ const BlogsList = (props) => {
     <div className="blog-list">
       <h2>Blogs</h2>
       {props.blogs.map(blog =>
-        <Blog
+        <BlogLink
           key={blog.id}
           blog={blog}
           user={props.user}

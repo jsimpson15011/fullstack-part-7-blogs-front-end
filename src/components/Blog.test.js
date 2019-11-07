@@ -1,11 +1,11 @@
 import React from 'react'
-import Blog from './Blog'
+import BlogLink from './BlogLink'
 import { render, fireEvent } from '@testing-library/react'
 
-describe('<Blog />', () => {
+describe('<BlogLink />', () => {
   let component
   const blog = {
-    title: 'Test Blog',
+    title: 'Test BlogLink',
     author: 'Test Author',
     url: 'Test Url',
     likes: 0,
@@ -20,7 +20,7 @@ describe('<Blog />', () => {
   }
   beforeEach(() => {
     component = render(
-      <Blog
+      <BlogLink
         blog={blog}
         user={user}
       />
@@ -31,7 +31,7 @@ describe('<Blog />', () => {
     const nameAndAuthor = component.container.querySelector('.name-and-author')
     const blogDetails = component.container.querySelector('.blog-details')
 
-    expect(nameAndAuthor).toHaveTextContent('Test Blog Test Author')
+    expect(nameAndAuthor).toHaveTextContent('Test BlogLink Test Author')
     expect(blogDetails).toHaveStyle('display:none')
   })
 

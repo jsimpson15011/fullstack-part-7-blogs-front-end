@@ -1,35 +1,32 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import { likeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, user, handleLike, handleDelete }) => {
-  const [visible, setVisibility] = useState(false)
-  const showWhenVisible = { display: visible ? '' : 'none' }
+const Blog = (props) => {
+  if (props.blog === undefined) {
+    return null
+  }
   return (
-    <div style={{
-      border: 'solid 1px',
-      marginBottom: '5px',
-      cursor: 'pointer',
-      padding: '5px'
-    }}
-    >
-      <div className="name-and-author" onClick={() => setVisibility(!visible)}>
-        {blog.title} {blog.author}
+    <div className="blog">
+      <h2>{props.blog.title}</h2>
+      <a href={props.blog.url}>{props.blog.url}</a>
+      <div>
+        {props.blog.likes} likes
+        <button onClick={()=>props.likeBlog(props.blog)}>like</button>
       </div>
-      <div className="blog-details" style={showWhenVisible}>
-        <a href={blog.url}>{blog.url}</a>
-        <p>{`${blog.likes} likes`}
-          <button onClick={() => handleLike(blog)}>like</button>
-        </p>
-        <p>{`added by ${blog.user.name}`}</p>
-        <button
-          onClick={() => handleDelete(blog)}
-          style={{ display: blog.user.username === user.username ?
-            '' :
-            'none'
-          }}
-        >remove</button>
-      </div>
+      added by {props.blog.user.name}
     </div>
   )
 }
 
-export default Blog
+const mapStateToProps = (state, props) => {
+  const blogs = state.blogs
+  const blog = blogs.filter(user => user.id === props.id)
+
+  return { blog: blog[0] }
+}
+const mapDispatchToProps = {
+  likeBlog
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Blog)

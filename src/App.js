@@ -15,6 +15,7 @@ import {
 } from 'react-router-dom'
 import UserPage from './pages/UserPage'
 import { getAllUsers } from './reducers/allUsersReducer'
+import BlogPage from './pages/BlogPage'
 
 const App = (props) => {
   useEffect(() => {
@@ -44,6 +45,9 @@ const App = (props) => {
         </Route>
         <Route exact path="/users/:userId">
           <UserPage/>
+        </Route>
+        <Route exact path="/blogs/:blogId">
+          <BlogPage/>
         </Route>
         <Route exact path="/">
           <h2>blogs</h2>

@@ -24,7 +24,7 @@ const blogs = [
   {
     id: '5a451e30b5ffd44a58fa79ab',
     title: 'The most url methods of HTTP are GET and POST',
-    author: 'Blog Writerman',
+    author: 'BlogLink Writerman',
     url: 'test.com',
     user: {
       _id: '5a437a9e514ab7f168ddf138',

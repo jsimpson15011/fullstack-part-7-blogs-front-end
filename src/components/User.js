@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const User = (props) => {
   if (props.user === undefined) {
@@ -8,7 +9,9 @@ const User = (props) => {
   const mappedBlogs = props.user.blogs.map(blog => {
     return (
       <li key={blog.id}>
+        <Link to={`/blogs/${blog.id}`}>
         {blog.title}
+        </Link>
       </li>
     )
   })

@@ -6,7 +6,7 @@ import { render, fireEvent } from '@testing-library/react'
 describe('<SimpleBlog />', () => {
   let component
   const blog = {
-    title: 'Test Blog',
+    title: 'Test BlogLink',
     author: 'Test Author',
     likes: 0
   }
@@ -21,7 +21,7 @@ describe('<SimpleBlog />', () => {
     const titleAndAuthor = component.container.querySelector('.title-and-author')
 
     expect(titleAndAuthor).toHaveTextContent(
-      'Test Blog Test Author'
+      'Test BlogLink Test Author'
     )
   })
 
