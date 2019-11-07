@@ -1,11 +1,13 @@
 import React from 'react'
+import { useField } from '../hooks'
+import { connect } from 'react-redux'
+import { createNewBlog } from '../reducers/blogReducer'
 
-const NewBlogForm = ({
-  handleBlogCreation,
-  blogTitle,
-  blogAuthor,
-  blogUrl
-}) => {
+const NewBlogForm = (props) => {
+  const blogTitle = useField('text')
+  const blogAuthor = useField('text')
+  const blogUrl = useField('text')
+
   const blogTitleProps = Object.assign({}, blogTitle)
   delete blogTitleProps.reset
 
@@ -14,6 +16,23 @@ const NewBlogForm = ({
 
   const blogUrlProps = Object.assign({}, blogUrl)
   delete blogUrlProps.reset
+
+  const handleBlogCreation = async (event) => {
+    event.preventDefault()
+    props.blogFormRef.current.toggleVisibility()
+    const newBlog = {
+      title: blogTitle.value,
+      author: blogAuthor.value,
+      url: blogUrl.value,
+      user: props.user.id
+    }
+
+    props.createNewBlog(newBlog)
+
+    blogTitle.reset()
+    blogAuthor.reset()
+    blogUrl.reset()
+  }
 
   return (
     <div>
@@ -37,4 +56,16 @@ const NewBlogForm = ({
   )
 }
 
-export default NewBlogForm
+const mapStateToProps = state => (
+  {
+    message: state.message,
+    blogs: state.blogs,
+    user: state.user
+  }
+)
+
+const mapDispatchToProps = {
+  createNewBlog
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewBlogForm)

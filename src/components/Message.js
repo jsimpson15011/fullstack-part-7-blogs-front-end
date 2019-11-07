@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 const Message = ({ message }) => {
   if(!message.content){
     return(
@@ -18,4 +19,10 @@ const Message = ({ message }) => {
   }
 }
 
-export default Message
+const mapStatesToProp = state => (
+  {
+    message: state.message
+  }
+)
+
+export default connect(mapStatesToProp)(Message)

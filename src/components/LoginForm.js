@@ -1,6 +1,22 @@
 import React from 'react'
+import { useField } from '../hooks'
+import { connect } from 'react-redux'
+import { logIn } from '../reducers/userReducer'
 
-const LoginForm = ({handleLogin, username, password}) => {
+const LoginForm = (props) => {
+  const username = useField('text')
+  const password = useField('password')
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    const usernameValue = username.value
+    const passwordValue = password.value
+
+    props.logIn(usernameValue, passwordValue)
+    username.reset()
+    password.reset()
+  }
+
   const usernameProps = Object.assign({}, username)
   delete usernameProps.reset
 
@@ -23,4 +39,8 @@ const LoginForm = ({handleLogin, username, password}) => {
   )
 }
 
-export default LoginForm
+const mapDispatchToProps = {
+  logIn
+}
+
+export default connect(null, mapDispatchToProps)(LoginForm)

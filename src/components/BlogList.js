@@ -30,7 +30,8 @@ const mapStateToProps = state => {
   })
 
   return ({
-    blogs: blogsSortedByLikes
+    blogs: blogsSortedByLikes,
+    user: state.user
   })
 }
 const mapDispatchToProps = {
