@@ -5,12 +5,12 @@ import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { logOut } from '../reducers/userReducer'
 
 const BlogsList = (props) => {
+  if (props.user === null){
+    return null
+  }
   return (
     <div className="blog-list">
       <h2>Blogs</h2>
-      <p>{`${props.user.name} logged in`}
-        <button onClick={() => props.logOut()}>Log out</button>
-      </p>
       {props.blogs.map(blog =>
         <Blog
           key={blog.id}

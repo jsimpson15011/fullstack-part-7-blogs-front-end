@@ -32,5 +32,4 @@ const Blog = ({ blog, user, handleLike, handleDelete }) => {
   )
 }
 
-
 export default Blog

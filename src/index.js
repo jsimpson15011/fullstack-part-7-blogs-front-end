@@ -8,11 +8,13 @@ import ReduxThunk from 'redux-thunk'
 import messageReducer from './reducers/messageReducer'
 import blogReducer from './reducers/blogReducer'
 import userReducer from './reducers/userReducer'
+import allUsersReducer from './reducers/allUsersReducer'
 
 const rootReducer = combineReducers({
   message: messageReducer,
   blogs: blogReducer,
-  user: userReducer
+  user: userReducer,
+  allUsers: allUsersReducer
 })
 const store = createStore(
   rootReducer,
