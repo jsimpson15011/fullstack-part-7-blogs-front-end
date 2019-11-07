@@ -5,9 +5,6 @@ import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import { logOut } from '../reducers/userReducer'
 
 const BlogsList = (props) => {
-  if (props.user === null){
-    return null
-  }
   return (
     <div className="blog-list">
       <h2>Blogs</h2>

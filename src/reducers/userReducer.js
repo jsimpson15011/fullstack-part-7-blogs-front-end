@@ -1,6 +1,6 @@
 import blogsService from '../services/blogs'
 import loginService from '../services/login'
-import {newMessage} from './messageReducer'
+import { newMessage } from './messageReducer'
 
 export const initialUserCheck = () => {
   return dispatch => {
@@ -22,7 +22,6 @@ export const logIn = (username, password) => {
   return async dispatch => {
     try {
       const credentials = { 'username': username, 'password': password }
-
       const user = await loginService.login(credentials)
 
       window.localStorage.setItem(

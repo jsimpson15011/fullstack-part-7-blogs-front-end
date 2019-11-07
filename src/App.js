@@ -11,7 +11,8 @@ import { initialUserCheck, logIn } from './reducers/userReducer'
 import { connect } from 'react-redux'
 import {
   BrowserRouter as Router,
-  Route
+  Route,
+  Redirect
 } from 'react-router-dom'
 import UserPage from './pages/UserPage'
 import { getAllUsers } from './reducers/allUsersReducer'
@@ -37,7 +38,7 @@ const App = (props) => {
         <Route exact path="/login">
           <h2>Log into application</h2>
           <Togglable buttonLabel='login'>
-            <LoginForm/>
+            {props.user ? <Redirect to="/"/> : <LoginForm/>}
           </Togglable>
         </Route>
         <Route exact path="/users">
@@ -50,10 +51,13 @@ const App = (props) => {
           <BlogPage/>
         </Route>
         <Route exact path="/">
-          <h2>blogs</h2>
-          <Togglable buttonLabel="new blog" ref={blogFormRef}>
-            <NewBlogForm blogFormRef={blogFormRef}/>
-          </Togglable>
+          {
+            props.user
+              ? <Togglable buttonLabel="new blog" ref={blogFormRef}>
+                <NewBlogForm blogFormRef={blogFormRef}/>
+              </Togglable>
+              : null
+          }
           <BlogsList/>
         </Route>
       </div>

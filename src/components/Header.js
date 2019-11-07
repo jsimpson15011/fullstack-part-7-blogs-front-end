@@ -1,32 +1,16 @@
 import React from 'react'
 import Message from './Message'
-import { connect } from 'react-redux'
-import { logOut } from '../reducers/userReducer'
+import Navigation from './Navigation'
 
-const Header = (props) => {
-  if (props.user === null){
-    return null
-  }
+
+const Header = () => {
   return(
     <div className="header">
       <h1>blogs</h1>
       <Message/>
-      <p>
-        {`${props.user.name} logged in`}
-        <button onClick={() => props.logOut()}>Log out</button>
-      </p>
+      <Navigation/>
     </div>
   )
 }
 
-const mapStateToProps = state => {
-  return({
-    user: state.user
-  })
-}
-
-const mapDispatchToProps = {
-  logOut
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default Header
