@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { likeBlog } from '../reducers/blogReducer'
+import { PositiveButton } from './Button'
 
 const Blog = (props) => {
   if (props.blog === undefined) {
@@ -12,7 +13,7 @@ const Blog = (props) => {
       <a href={props.blog.url}>{props.blog.url}</a>
       <div>
         {props.blog.likes} likes
-        <button onClick={()=>props.likeBlog(props.blog)}>like</button>
+        <PositiveButton onClick={() => props.likeBlog(props.blog)}>like</PositiveButton>
       </div>
       added by {props.blog.user.name}
     </div>

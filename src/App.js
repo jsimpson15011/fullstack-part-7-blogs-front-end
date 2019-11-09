@@ -17,6 +17,19 @@ import {
 import UserPage from './pages/UserPage'
 import { getAllUsers } from './reducers/allUsersReducer'
 import BlogPage from './pages/BlogPage'
+import styled, { ThemeProvider } from 'styled-components'
+
+const PageWrapper = styled.div`
+  color: ${props => props.theme.foreground};
+  background: ${props => props.theme.background};
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  padding: 1.5rem;
+  a{
+    color: ${props => props.theme.foreground};
+  }
+`
 
 const App = (props) => {
   useEffect(() => {
@@ -30,37 +43,49 @@ const App = (props) => {
   }, [])
 
   const blogFormRef = React.createRef()
+  const theme = {
+    background: '#373634',
+    altBackground: '#21211c',
+    foreground: '#d7e9cf',
+    positive: '#85AD3A',
+    neutral: '#87B19E',
+    negative: '#C57073'
+  }
 
   return (
     <Router>
-      <div className="App">
-        <Header/>
-        <Route exact path="/login">
-          <h2>Log into application</h2>
-          <Togglable buttonLabel='login'>
-            {props.user ? <Redirect to="/"/> : <LoginForm/>}
-          </Togglable>
-        </Route>
-        <Route exact path="/users">
-          <UsersPage/>
-        </Route>
-        <Route exact path="/users/:userId">
-          <UserPage/>
-        </Route>
-        <Route exact path="/blogs/:blogId">
-          <BlogPage/>
-        </Route>
-        <Route exact path="/">
-          {
-            props.user
-              ? <Togglable buttonLabel="new blog" ref={blogFormRef}>
-                <NewBlogForm blogFormRef={blogFormRef}/>
+      <ThemeProvider theme={theme}>
+        <PageWrapper>
+          <div className="App">
+            <Header/>
+            <Route exact path="/login">
+              <h2>Log into application</h2>
+              <Togglable buttonLabel='login'>
+                {props.user ? <Redirect to="/"/> : <LoginForm/>}
               </Togglable>
-              : null
-          }
-          <BlogsList/>
-        </Route>
-      </div>
+            </Route>
+            <Route exact path="/users">
+              <UsersPage/>
+            </Route>
+            <Route exact path="/users/:userId">
+              <UserPage/>
+            </Route>
+            <Route exact path="/blogs/:blogId">
+              <BlogPage/>
+            </Route>
+            <Route exact path="/">
+              {
+                props.user
+                  ? <Togglable buttonLabel="new blog" ref={blogFormRef}>
+                    <NewBlogForm blogFormRef={blogFormRef}/>
+                  </Togglable>
+                  : null
+              }
+              <BlogsList/>
+            </Route>
+          </div>
+        </PageWrapper>
+      </ThemeProvider>
     </Router>
   )
 }

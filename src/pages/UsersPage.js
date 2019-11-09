@@ -2,7 +2,25 @@ import React from 'react'
 import { getAllUsers } from '../reducers/allUsersReducer'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
+const UserTable = styled.table`
+  background: ${props => props.theme.altBackground};
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  *{
+    padding: .5em;
+  }
+  tr:nth-child(odd){
+    background: ${props => props.theme.background};
+  }
+  th{
+    background: ${props => props.theme.neutral};
+    border: transparent;
+    color: white;
+  }
+`
 const UsersPage = (props) => {
   const mappedUsers = props.allUsers.map(user => {
     return(
@@ -16,15 +34,15 @@ const UsersPage = (props) => {
   return (
     <>
       <h2>Users</h2>
-      <table>
+      <UserTable>
         <tbody>
-        <tr>
-          <td/>
-          <td>blogs created</td>
-        </tr>
-        {mappedUsers}
+          <tr>
+            <th/>
+            <th>blogs created</th>
+          </tr>
+          {mappedUsers}
         </tbody>
-      </table>
+      </UserTable>
     </>
 
   )

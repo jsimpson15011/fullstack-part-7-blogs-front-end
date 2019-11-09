@@ -2,6 +2,7 @@ import React from 'react'
 import { useField } from '../hooks'
 import { connect } from 'react-redux'
 import { logIn } from '../reducers/userReducer'
+import { PositiveButton } from './Button'
 
 const LoginForm = (props) => {
   const username = useField('text')
@@ -25,7 +26,6 @@ const LoginForm = (props) => {
 
   return (
     <form onSubmit={handleLogin}>
-      <h2>log into application</h2>
       <div>
         username
         <input {...usernameProps}/>
@@ -34,7 +34,7 @@ const LoginForm = (props) => {
         password
         <input {...passwordProps}/>
       </div>
-      <button type="submit">login</button>
+      <PositiveButton type="submit">login</PositiveButton>
     </form>
   )
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { useField } from '../hooks'
 import { connect } from 'react-redux'
 import { createNewBlog } from '../reducers/blogReducer'
+import { PositiveButton } from './Button'
 
 const NewBlogForm = (props) => {
   const blogTitle = useField('text')
@@ -50,7 +51,7 @@ const NewBlogForm = (props) => {
           url:
           <input {...blogUrlProps}/>
         </div>
-        <button type="submit">create</button>
+        <PositiveButton type="submit">create</PositiveButton>
       </form>
     </div>
   )

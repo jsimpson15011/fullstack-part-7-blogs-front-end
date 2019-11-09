@@ -1,5 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
+
+const StyledMessage = styled.div`
+  border: ${props => props.type === 'error'
+    ? props.theme.negative
+    : props.theme.positive} solid 5px;
+  color: ${props => props.type === 'error'
+    ? props.theme.negative
+    : props.theme.positive};
+  font-size: 2em;
+  text-align: center;
+  margin: 15px;
+  padding: 5px;
+  box-sizing: border-box;
+  background: ${props => props.theme.altBackground};
+`
+
 const Message = ({ message }) => {
   if(!message.content){
     return(
@@ -7,14 +24,9 @@ const Message = ({ message }) => {
     )
   } else{
     return(
-      <div
-        style={{
-          border: message.type === 'error'? 'solid red 5px': 'solid green 5px',
-          fontSize: '2em',
-        }}
-      >
+      <StyledMessage type={message.type}>
         {message.content}
-      </div>
+      </StyledMessage>
     )
   }
 }
