@@ -15,6 +15,10 @@ const StyledMessage = styled.div`
   padding: 5px;
   box-sizing: border-box;
   background: ${props => props.theme.altBackground};
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 `
 
 const Message = ({ message }) => {

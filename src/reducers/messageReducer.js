@@ -13,7 +13,7 @@ export const newMessage = (message) => {
 
     setTimeout(() => {
       dispatch(changeMessage(''))
-    }, 10000)
+    }, 5000)
   }
 }
 

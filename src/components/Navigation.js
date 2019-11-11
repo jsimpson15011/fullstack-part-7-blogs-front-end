@@ -7,10 +7,12 @@ import { NegativeButton } from './Button'
 
 const StyledNav = styled.div`
   background: ${props => props.theme.altBackground};
+  > *{
+    border: solid ${props => props.theme.foreground};
+    margin-right: 5px;
+  }
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  padding: 1em 0;
   font-size: 1.5em;
   a{
     background: ${props => props.theme.background};
