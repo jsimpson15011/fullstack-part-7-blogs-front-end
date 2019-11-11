@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { likeBlog } from '../reducers/blogReducer'
 import { PositiveButton } from './Button'
+import Comments from './Comments'
 
 const Blog = (props) => {
   if (props.blog === undefined) {
@@ -16,6 +17,7 @@ const Blog = (props) => {
         <PositiveButton onClick={() => props.likeBlog(props.blog)}>like</PositiveButton>
       </div>
       added by {props.blog.user.name}
+      <Comments comments={props.blog.comments} blogId={props.blog.id}/>
     </div>
   )
 }

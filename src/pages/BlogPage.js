@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 
 const BlogPage = () => {
   const { blogId } = useParams()
+
   return (
     <Blog id={blogId}/>
   )

@@ -1,5 +1,6 @@
 import blogService from '../services/blogs'
-import {newMessage} from './messageReducer'
+import commentService from '../services/comments'
+import { newMessage } from './messageReducer'
 
 export const getAllBlogs = () => {
   return async dispatch => {
@@ -17,7 +18,7 @@ export const createNewBlog = blog => {
   return async dispatch => {
     try{
       await blogService.create(blog)
-      dispatch(newMessage({content: `blog ${blog.title} by ${blog.author} added`}))
+      dispatch(newMessage({ content: `blog ${blog.title} by ${blog.author} added` }))
 
       const blogs = await blogService.getAll()
       dispatch(
@@ -28,9 +29,9 @@ export const createNewBlog = blog => {
       )
     } catch (e) {
       if (e.response.data.error) {
-        dispatch(newMessage({content:e.response.data.error, type:'error'}))
+        dispatch(newMessage({ content:e.response.data.error, type:'error' }))
       } else {
-        dispatch(newMessage({content:'something went wrong please try again', type:'error'}))
+        dispatch(newMessage({ content:'something went wrong please try again', type:'error' }))
       }
     }
   }
@@ -40,7 +41,7 @@ export const deleteBlog = blog => {
   return async dispatch => {
     try{
       await blogService.deleteBlog(blog)
-      dispatch(newMessage({content: `blog ${blog.title} by ${blog.author} removed`}))
+      dispatch(newMessage({ content: `blog ${blog.title} by ${blog.author} removed` }))
 
       const blogs = await blogService.getAll()
       dispatch(
@@ -51,9 +52,9 @@ export const deleteBlog = blog => {
       )
     } catch (e) {
       if (e.response.data.error) {
-        dispatch(newMessage({content:e.response.data.error, type:'error'}))
+        dispatch(newMessage({ content:e.response.data.error, type:'error' }))
       } else {
-        dispatch(newMessage({content:'something went wrong please try again', type:'error'}))
+        dispatch(newMessage({ content:'something went wrong please try again', type:'error' }))
       }
     }
   }
@@ -63,7 +64,7 @@ export const likeBlog = blog => {
   return async dispatch => {
     try{
       await blogService.addLike(blog)
-      dispatch(newMessage({content: `you voted for ${blog.title} by ${blog.author}`}))
+      dispatch(newMessage({ content: `you voted for ${blog.title} by ${blog.author}` }))
 
       const blogs = await blogService.getAll()
       dispatch(
@@ -74,11 +75,19 @@ export const likeBlog = blog => {
       )
     } catch (e) {
       if (e.response.data.error) {
-        dispatch(newMessage({content:e.response.data.error, type:'error'}))
+        dispatch(newMessage({ content:e.response.data.error, type:'error' }))
       } else {
-        dispatch(newMessage({content:'something went wrong please try again', type:'error'}))
+        dispatch(newMessage({ content:'something went wrong please try again', type:'error' }))
       }
     }
+  }
+}
+
+export const addComment = (content, blogId) => {
+  return async dispatch => {
+    await commentService.addCommentTo(blogId, content)
+
+    dispatch(getAllBlogs())
   }
 }
 
