@@ -10,7 +10,7 @@ const User = (props) => {
     return (
       <li key={blog.id}>
         <Link to={`/blogs/${blog.id}`}>
-        {blog.title}
+          {blog.title}
         </Link>
       </li>
     )
